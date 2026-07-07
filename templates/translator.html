@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SignBridge - Translator</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    color: #1e293b;
+}
+
+/* NAVBAR */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 8%;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+.nav-links a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #64748b;
+}
+
+.nav-links a.active {
+    color: #4f46e5;
+}
+
+/* LAYOUT */
+.wrapper {
+    max-width: 1200px;
+    margin: 50px auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+/* CARD */
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* VIDEO */
+.video-box {
+    width: 100%;
+    height: 350px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 3px solid #4f46e5;
+}
+.video-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* prevents white flash */
+}
+
+/* BUTTONS */
+.btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    margin-top: 10px;
+    cursor: pointer;
+    color: white;
+    transition: 0.3s;
+}
+
+/* Gradient Buttons */
+.btn-start {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.btn-text {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+}
+
+.btn-voice {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.btn:hover {
+    transform: scale(1.03);
+}
+
+/* OUTPUT */
+.output-box {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* INPUT */
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+/* SIGN GRID */
+.sign-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.sign-box {
+    width: 65px;
+    text-align: center;
+    padding: 5px;
+    border-radius: 10px;
+    background: #f1f5f9;
+}
+
+.sign-box img {
+    width: 100%;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">SignBridge</div>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/learn">Learn</a>
+        <a href="/translator" class="active">Translator</a>
+        <a href="/practice">Practice</a>
+    </div>
+</nav>
+
+<div class="wrapper">
+
+<!-- LEFT: CAMERA -->
+<div class="card">
+    <h2>Camera Mode</h2>
+<div class="video-box">
+   <img id="feed" src="/video_feed" width="100%" height="100%">
+</div>
+
+    <button class="btn btn-start" onclick="handleStart()">START & TRANSLATE</button>
+
+    <div class="output-box">
+        <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+        <p><strong>Result:</strong></p>
+        <h2 id="textOut" style="color:#4f46e5;">Waiting...</h2>
+    </div>
+</div>
+
+<!-- RIGHT: TEXT -->
+<div class="card">
+    <h2>Text → Sign</h2>
+
+    <input type="text" id="userInput" placeholder="Type here...">
+
+    <div style="display:flex; gap:10px;">
+        <button class="btn btn-text" onclick="showSigns()">Translate</button>
+        <button class="btn btn-voice" id="voiceBtn">🎤 Voice</button>
+    </div>
+
+    <div class="sign-grid" id="signDisplay"></div>
+</div>
+
+</div>
+
+<script>
+let running = false;
+
+function handleStart() {
+    running = true;
+    updateText();
+}
+
+function updateText() {
+    if (!running) return;
+
+    fetch('/get_prediction')
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('textOut').innerText = data.text;
+    });
+
+    setTimeout(updateText, 300); // smooth
+}
+
+/* TEXT TO SIGN */
+function showSigns() {
+    const val = document.getElementById('userInput').value.toUpperCase();
+    const display = document.getElementById('signDisplay');
+    display.innerHTML = '';
+
+    for (let char of val) {
+        if (char === ' ') continue;
+
+        display.innerHTML += `
+        <div class="sign-box">
+            <img src="/static/signs/alphabet/${char.toLowerCase()}.jpeg"
+                 onerror="this.src='https://placehold.co/50x50?text=${char}'">
+            <p>${char}</p>
+        </div>`;
+    }
+}
+
+/* VOICE */
+const vBtn = document.getElementById('voiceBtn');
+
+if ('webkitSpeechRecognition' in window) {
+    const recognition = new webkitSpeechRecognition();
+
+    vBtn.onclick = () => {
+        recognition.start();
+        vBtn.innerText = "Listening...";
+    };
+
+    recognition.onresult = (e) => {
+        const text = e.results[0][0].transcript;
+        document.getElementById('userInput').value = text;
+        vBtn.innerText = "🎤 Voice";
+        showSigns();
+    };
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+/* 🌈 Gradient Background */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #4f46e5, #9333ea, #ec4899);
+    color: #1e293b;
+}
+
+/* 🔥 Glass Effect Cards */
+.card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    padding: 25px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+}
+
+/* ✨ Gradient Text */
+.gradient-text {
+    background: linear-gradient(90deg, #facc15, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* 🚀 Buttons */
+.btn {
+    background: linear-gradient(135deg, #22c55e, #10b981);
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+/* 🎤 Voice Button */
+.btn-voice {
+    background: linear-gradient(135deg, #ef4444, #f97316);
+}
+
+/* 🔤 Input */
+input {
+    border-radius: 10px;
+    border: none;
+    padding: 12px;
+    outline: none;
+}
+
+/* 📺 Output box */
+.output-box {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+/* 🔥 Navbar */
+nav {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: 0 0 15px 15px;
+}
+
+/* 🎯 Links */
+.nav-links a {
+    color: white !important;
+    font-weight: bold;
+}
+
+/* 💫 Hover animation */
+.nav-links a:hover {
+    color: #facc15 !important;
+}
