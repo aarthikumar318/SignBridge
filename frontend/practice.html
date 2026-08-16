@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SignBridge - Practice</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#eef2ff,#f8fafc);
+    color:#1e293b;
+}
+
+/* NAVBAR */
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:1.2rem 8%;
+    background:white;
+    border-bottom:1px solid #e2e8f0;
+}
+
+.logo{
+    font-size:1.3rem;
+    font-weight:700;
+}
+
+.nav-links a{
+    margin-left:20px;
+    text-decoration:none;
+    color:#64748b;
+}
+
+.nav-links a.active{
+    color:#4f46e5;
+}
+
+/* MAIN */
+.container{
+    max-width:1000px;
+    margin:50px auto;
+}
+
+/* LEVELS */
+.level-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:30px;
+}
+
+.level-card{
+    background:white;
+    padding:40px 20px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.05);
+    text-align:center;
+    transition:0.3s;
+}
+
+.level-card:hover{
+    transform:translateY(-8px);
+}
+
+.level-card h2{
+    margin-bottom:15px;
+}
+
+.level-card p{
+    color:#64748b;
+    margin-bottom:20px;
+}
+
+.btn{
+    padding:12px 24px;
+    border:none;
+    border-radius:10px;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.easy{
+    background:linear-gradient(135deg,#10b981,#059669);
+}
+
+.medium{
+    background:linear-gradient(135deg,#6366f1,#4f46e5);
+}
+
+.hard{
+    background:linear-gradient(135deg,#ef4444,#dc2626);
+}
+
+/* QUIZ AREA */
+.quiz-box{
+    margin-top:50px;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.05);
+    text-align:center;
+    display:none;
+}
+
+.quiz-box img{
+    width:220px;
+    height:220px;
+    object-fit:contain;
+    margin:20px 0;
+}
+
+.options{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    margin-top:20px;
+}
+
+.option-btn{
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#eef2ff;
+    cursor:pointer;
+    font-size:16px;
+    transition:0.3s;
+}
+
+.option-btn:hover{
+    background:#4f46e5;
+    color:white;
+}
+
+/* SCORE */
+.score{
+    margin-top:20px;
+    font-size:18px;
+    font-weight:600;
+    color:#4f46e5;
+}
+
+.result{
+    margin-top:20px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.correct{
+    color:#10b981;
+}
+
+.wrong{
+    color:#ef4444;
+}
+.btn:disabled{
+    opacity:0.5;
+    cursor:not-allowed;
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">SignBridge</div>
+
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="learn.html">Learn</a>
+        <a href="translator.html">Translator</a>
+        <a href="practice.html" class="active">Practice</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- LEVELS -->
+    <div class="level-grid">
+
+        <div class="level-card">
+            <h2>Easy</h2>
+            <p>Identify alphabets and numbers.</p>
+
+            <button class="btn easy" onclick="startEasy()">
+                Start Easy
+            </button>
+        </div>
+
+        <div class="level-card">
+            <h2>Intermediate</h2>
+            <p>Unlock after scoring 7/10</p>
+<button
+    class="btn medium"
+    id="intermediateBtn"
+    onclick="startIntermediate()"
+    disabled>
+
+    Locked
+
+</button>
+        </div>
+
+        <div class="level-card">
+    <h2>Hard</h2>
+    <p>Show gestures in live camera.</p> 
+    <button
+class="btn hard"
+id="hardBtn"
+onclick="startHard()"
+disabled>
+
+    Locked
+
+</button>
+</div>
+
+    </div>
+
+    <!-- QUIZ BOX -->
+    <div class="quiz-box" id="quizBox">
+
+        <h1>Easy Quiz</h1>
+
+        <h2 id="questionText">
+            Question 1/10
+        </h2>
+
+        <img id="quizImage" src="">
+
+        <div class="options" id="options"></div>
+
+        <div class="result" id="result"></div>
+
+        <!-- NEXT BUTTON -->
+        <button
+            class="btn medium"
+            id="nextBtn"
+            onclick="nextQuestion()"
+            style="margin-top:20px; display:none;">
+            Next Question
+        </button>
+
+        <div class="score">
+            Score:
+            <span id="score">0</span>/10
+        </div>
+
+    </div>
+
+</div>
+<!-- INTERMEDIATE QUIZ -->
+<div class="quiz-box" id="intermediateQuiz" style="display:none;">
+
+    <h1>Intermediate Quiz</h1>
+
+    <h2 id="intermediateQuestionText">
+        Question 1/2
+    </h2>
+
+    <div id="intermediateImages"
+    style="display:flex;
+    justify-content:center;
+    gap:10px;
+    margin:20px 0;">
+    </div>
+
+    <div class="options" id="intermediateOptions"></div>
+
+    <div class="result" id="intermediateResult"></div>
+
+    <button
+        class="btn medium"
+        id="intermediateNextBtn"
+        onclick="nextIntermediateQuestion()"
+        style="margin-top:20px; display:none;">
+
+        Next Question
+
+    </button>
+
+    <div class="score">
+        Score:
+        <span id="intermediateScore">0</span>/2
+    </div>
+
+</div>
+<!-- HARD QUIZ --><!-- HARD QUIZ -->
+
+<div class="quiz-box"
+id="hardQuiz"
+style="display:none;">
+
+    <h1>Hard Quiz</h1>
+
+    <h2 id="hardQuestion">
+        Show This Sign
+    </h2>
+
+    <!-- CAMERA -->
+    <div class="video-box"
+    style="margin-top:20px;">
+
+        <img
+        id="feed"
+        src="/video_feed"
+        width="400">
+
+    </div>
+
+    <div class="result"
+    id="hardResult"></div>
+
+    <button
+    class="btn hard"
+    onclick="checkHardAnswer()"
+    style="margin-top:20px;">
+
+        Check Answer
+
+    </button>
+
+</div>
+<script>
+   const intermediateData = [
+
+{
+    images:[
+        "/static/signs/alphabet/h.jpeg",
+        "/static/signs/alphabet/i.jpeg"
+    ],
+    answer:"HI",
+    options:["HI","BYE","YES","NO"]
+},
+
+{
+    images:[
+        "/static/signs/alphabet/c.jpeg",
+        "/static/signs/alphabet/a.jpeg",
+        "/static/signs/alphabet/t.jpeg"
+    ],
+    answer:"CAT",
+    options:["DOG","CAT","BAT","BALL"]
+},
+
+{
+    images:[
+        "/static/signs/alphabet/d.jpeg",
+        "/static/signs/alphabet/o.jpeg",
+        "/static/signs/alphabet/g.jpeg"
+    ],
+    answer:"DOG",
+    options:["DOG","CAT","FOX","BAT"]
+},
+
+{
+    images:[
+        "/static/signs/alphabet/y.jpeg",
+        "/static/signs/alphabet/e.jpeg",
+        "/static/signs/alphabet/s.jpeg"
+    ],
+    answer:"YES",
+    options:["YES","NO","HI","BYE"]
+},
+
+{
+    images:[
+        "/static/signs/alphabet/n.jpeg",
+        "/static/signs/alphabet/o.jpeg"
+    ],
+    answer:"NO",
+    options:["YES","NO","CAT","DOG"]
+},
+
+{
+    images:[
+        "/static/signs/alphabet/b.jpeg",
+        "/static/signs/alphabet/y.jpeg",
+        "/static/signs/alphabet/e.jpeg"
+    ],
+    answer:"BYE",
+    options:["HELLO","BYE","YES","NO"]
+},
+
+{
+    images:[
+        "/static/signs/alphabet/l.jpeg",
+        "/static/signs/alphabet/o.jpeg",
+        "/static/signs/alphabet/v.jpeg",
+        "/static/signs/alphabet/e.jpeg"
+    ],
+    answer:"LOVE",
+    options:["LOVE","LIKE","HATE","CARE"]
+},
+
+{
+    images:[
+        "/static/signs/alphabet/f.jpeg",
+        "/static/signs/alphabet/o.jpeg",
+        "/static/signs/alphabet/o.jpeg",
+        "/static/signs/alphabet/d.jpeg"
+    ],
+    answer:"FOOD",
+    options:["FOOD","WATER","RICE","MILK"]
+},
+
+{
+    images:[
+        "/static/signs/alphabet/w.jpeg",
+        "/static/signs/alphabet/a.jpeg",
+        "/static/signs/alphabet/t.jpeg",
+        "/static/signs/alphabet/e.jpeg",
+        "/static/signs/alphabet/r.jpeg"
+    ],
+    answer:"WATER",
+    options:["JUICE","FOOD","WATER","TEA"]
+},
+
+{
+    images:[
+        "/static/signs/alphabet/h.jpeg",
+        "/static/signs/alphabet/e.jpeg",
+        "/static/signs/alphabet/l.jpeg",
+        "/static/signs/alphabet/p.jpeg"
+    ],
+    answer:"HELP",
+    options:["HELP","STOP","GO","RUN"]
+}
+
+];
+const hardData = [
+
+    "A",
+    "B",
+    "C",
+    "1",
+    "2",
+    "3",
+    "HELLO",
+    "YES",
+    "NO",
+    "STOP"
+
+];
+
+/* =========================
+   QUIZ QUESTIONS
+========================= */
+
+const quizData = [
+
+{
+    image:"/static/signs/alphabet/a.jpeg",
+    answer:"A",
+    options:["A","B","C","D"]
+},
+
+{
+    image:"/static/signs/alphabet/b.jpeg",
+    answer:"B",
+    options:["A","B","C","D"]
+},
+
+{
+    image:"/static/signs/alphabet/c.jpeg",
+    answer:"C",
+    options:["A","B","C","D"]
+},
+
+{
+    image:"/static/signs/alphabet/d.jpeg",
+    answer:"D",
+    options:["A","B","C","D"]
+},
+
+{
+    image:"/static/signs/alphabet/e.jpeg",
+    answer:"E",
+    options:["E","F","G","H"]
+},
+
+{
+    image:"/static/signs/numbers/1.jpeg",
+    answer:"1",
+    options:["1","2","3","4"]
+},
+
+{
+    image:"/static/signs/numbers/2.jpeg",
+    answer:"2",
+    options:["2","3","4","5"]
+},
+
+{
+    image:"/static/signs/numbers/3.jpeg",
+    answer:"3",
+    options:["3","4","5","6"]
+},
+
+{
+    image:"/static/signs/numbers/4.jpeg",
+    answer:"4",
+    options:["4","5","6","7"]
+},
+
+{
+    image:"/static/signs/numbers/5.jpeg",
+    answer:"5",
+    options:["5","6","7","8"]
+}
+
+];
+
+/* =========================
+   VARIABLES
+========================= */
+
+let currentIndex = 0;
+let score = 0;
+
+/* =========================
+   START QUIZ
+========================= */
+
+function startEasy(){
+
+    currentIndex = 0;
+    score = 0;
+
+    document.getElementById("score").innerText = score;
+
+    document.getElementById("quizBox").style.display = "block";
+
+    loadQuestion();
+}
+
+/* =========================
+   LOAD QUESTION
+========================= */
+
+function loadQuestion(){
+
+    // CLEAR RESULT
+    document.getElementById("result").innerHTML = "";
+
+    // HIDE NEXT BUTTON
+    document.getElementById("nextBtn").style.display = "none";
+
+    // GET CURRENT QUESTION
+    const currentQuestion = quizData[currentIndex];
+
+    // QUESTION NUMBER
+    document.getElementById("questionText").innerHTML =
+        `Question ${currentIndex + 1}/10`;
+
+    // IMAGE
+    document.getElementById("quizImage").src =
+        currentQuestion.image;
+
+    // OPTIONS
+    const optionsDiv =
+        document.getElementById("options");
+
+    optionsDiv.innerHTML = "";
+
+    currentQuestion.options.forEach(option => {
+
+        optionsDiv.innerHTML += `
+
+            <button class="option-btn"
+            onclick="checkAnswer('${option}')">
+
+                ${option}
+
+            </button>
+
+        `;
+    });
+}
+
+/* =========================
+   CHECK ANSWER
+========================= */
+
+function checkAnswer(selected){
+
+    const currentQuestion = quizData[currentIndex];
+
+    const result =
+        document.getElementById("result");
+
+    // DISABLE BUTTONS
+    const buttons =
+        document.querySelectorAll(".option-btn");
+
+    buttons.forEach(btn => {
+        btn.disabled = true;
+    });
+
+    // CORRECT
+    if(selected === currentQuestion.answer){
+
+        result.innerHTML = "✅ Correct!";
+        result.className = "result correct";
+
+        score++;
+
+        document.getElementById("score").innerText =
+            score;
+    }
+
+    // WRONG
+    else{
+
+        result.innerHTML =
+            `❌ Wrong! Correct Answer: ${currentQuestion.answer}`;
+
+        result.className = "result wrong";
+    }
+
+    // SHOW NEXT BUTTON
+    document.getElementById("nextBtn").style.display =
+        "inline-block";
+}
+
+/* =========================
+   NEXT QUESTION
+========================= */
+function nextQuestion(){
+
+    currentIndex++;
+
+    // QUIZ FINISHED
+    if(currentIndex >= quizData.length){
+
+        // UNLOCK INTERMEDIATE
+          // UNLOCK
+    if(score >= 7){
+        unlockIntermediate();
+    }
+
+        document.getElementById("quizBox").innerHTML = `
+
+            <h1>Quiz Finished</h1>
+
+            <h2 style="margin-top:20px;">
+                Your Score: ${score}/10
+            </h2>
+
+            ${
+                score >= 7
+
+                ?
+
+                `
+                <h2 style="color:green; margin-top:20px;">
+                    ✅ Intermediate Unlocked
+                </h2>
+
+                <button class="btn medium"
+                onclick="startIntermediate()"
+                style="margin-top:20px;">
+
+                    Start Intermediate
+
+                </button>
+                `
+
+                :
+
+                `
+                <h2 style="color:red; margin-top:20px;">
+                    ❌ Score at least 7/10
+                </h2>
+                `
+            }
+
+            <button class="btn easy"
+            onclick="retryQuiz()"
+            style="margin-top:30px;">
+
+                Retry Quiz
+
+            </button>
+
+        `;
+
+        return;
+    }
+
+    // LOAD NEXT QUESTION
+    loadQuestion();
+}
+function retryQuiz(){
+
+    // RESET VALUES
+    currentIndex = 0;
+    score = 0;
+
+    // RESTORE QUIZ HTML
+    document.getElementById("quizBox").innerHTML = `
+
+        <h1>Easy Quiz</h1>
+
+        <h2 id="questionText">
+            Question 1/10
+        </h2>
+
+        <img id="quizImage" src="">
+
+        <div class="options" id="options"></div>
+
+        <div class="result" id="result"></div>
+
+        <button
+            class="btn medium"
+            id="nextBtn"
+            onclick="nextQuestion()"
+            style="margin-top:20px; display:none;">
+
+            Next Question
+
+        </button>
+
+        <div class="score">
+            Score:
+            <span id="score">0</span>/10
+        </div>
+
+    `;
+
+    document.getElementById("quizBox").style.display = "block";
+
+    loadQuestion();
+}
+function startIntermediate(){
+
+    document.getElementById("quizBox").style.display = "none";
+
+    document.getElementById("intermediateQuiz")
+        .style.display = "block";
+
+    loadIntermediateQuestion();
+}
+function unlockIntermediate(){
+
+    const mediumBtn =
+        document.getElementById("intermediateBtn");
+
+    mediumBtn.innerText = "Start Intermediate";
+
+    mediumBtn.disabled = false;
+
+    // REMOVE DISABLED STYLE
+    mediumBtn.style.opacity = "1";
+    mediumBtn.style.cursor = "pointer";
+
+    alert("🎉 Intermediate Level Unlocked!");
+}
+/* =========================
+   INTERMEDIATE VARIABLES
+========================= */
+
+let intermediateIndex = 0;
+let intermediateScore = 0;
+
+/* =========================
+   START INTERMEDIATE
+========================= */
+
+function startIntermediate(){
+
+    intermediateIndex = 0;
+    intermediateScore = 0;
+
+    document.getElementById("quizBox").style.display = "none";
+
+    document.getElementById("intermediateQuiz")
+        .style.display = "block";
+
+    loadIntermediateQuestion();
+}
+
+/* =========================
+   LOAD INTERMEDIATE QUESTION
+========================= */
+
+function loadIntermediateQuestion(){
+
+    document.getElementById("intermediateResult")
+        .innerHTML = "";
+
+    document.getElementById("intermediateNextBtn")
+        .style.display = "none";
+
+    const currentQuestion =
+        intermediateData[intermediateIndex];
+
+    document.getElementById(
+        "intermediateQuestionText"
+    ).innerHTML =
+        `Question ${intermediateIndex + 1}/${intermediateData.length}`;
+
+    const imageDiv =
+        document.getElementById("intermediateImages");
+
+    imageDiv.innerHTML = "";
+
+    currentQuestion.images.forEach(img => {
+
+        imageDiv.innerHTML += `
+
+            <img src="${img}"
+            style="width:120px;
+            height:120px;
+            object-fit:contain;">
+
+        `;
+    });
+
+    const optionsDiv =
+        document.getElementById("intermediateOptions");
+
+    optionsDiv.innerHTML = "";
+
+    currentQuestion.options.forEach(option => {
+
+        optionsDiv.innerHTML += `
+
+            <button class="option-btn"
+            onclick="checkIntermediateAnswer('${option}')">
+
+                ${option}
+
+            </button>
+
+        `;
+    });
+}
+
+/* =========================
+   CHECK INTERMEDIATE ANSWER
+========================= */
+
+function checkIntermediateAnswer(selected){
+
+    const currentQuestion =
+        intermediateData[intermediateIndex];
+
+    const result =
+        document.getElementById("intermediateResult");
+
+    const buttons =
+        document.querySelectorAll(
+            "#intermediateOptions .option-btn"
+        );
+
+    buttons.forEach(btn => {
+        btn.disabled = true;
+    });
+
+    if(selected === currentQuestion.answer){
+
+        result.innerHTML = "✅ Correct!";
+        result.className = "result correct";
+
+        intermediateScore++;
+
+        document.getElementById(
+            "intermediateScore"
+        ).innerText = intermediateScore;
+    }
+
+    else{
+
+        result.innerHTML =
+            `❌ Wrong! Correct Answer: ${currentQuestion.answer}`;
+
+        result.className = "result wrong";
+    }
+
+    document.getElementById(
+        "intermediateNextBtn"
+    ).style.display = "inline-block";
+}
+
+/* =========================
+   NEXT INTERMEDIATE QUESTION
+========================= */
+function nextIntermediateQuestion(){
+
+    intermediateIndex++;
+
+    if(intermediateIndex >= intermediateData.length){
+
+        // ✅ UNLOCK HARD LEVEL
+        if(intermediateScore >= 7){
+            unlockHard();
+        }
+
+        document.getElementById(
+            "intermediateQuiz"
+        ).innerHTML = `
+
+            <h1>Intermediate Finished</h1>
+
+            <h2 style="margin-top:20px;">
+                Your Score:
+                ${intermediateScore}/${intermediateData.length}
+            </h2>
+
+            ${
+                intermediateScore >= 7
+
+                ?
+
+                `
+                <h2 style="color:green; margin-top:20px;">
+                    🔥 Hard Level Unlocked
+                </h2>
+
+                <button class="btn hard"
+                onclick="startHard()"
+                style="margin-top:20px;">
+
+                    Start Hard
+
+                </button>
+                `
+
+                :
+
+                `
+                <h2 style="color:red; margin-top:20px;">
+                    ❌ Score at least 7/10
+                </h2>
+                `
+            }
+
+            <button class="btn medium"
+            onclick="retryIntermediate()"
+            style="margin-top:30px;">
+
+                Retry Intermediate
+
+            </button>
+
+        `;
+
+        return;
+    }
+
+    loadIntermediateQuestion();
+}
+function retryIntermediate(){
+
+    // RESET VALUES
+    intermediateIndex = 0;
+    intermediateScore = 0;
+
+    // RESTORE HTML
+    document.getElementById("intermediateQuiz").innerHTML = `
+
+        <h1>Intermediate Quiz</h1>
+
+        <h2 id="intermediateQuestionText">
+            Question 1/10
+        </h2>
+
+        <div id="intermediateImages"
+        style="display:flex;
+        justify-content:center;
+        gap:10px;
+        margin:20px 0;">
+        </div>
+
+        <div class="options" id="intermediateOptions"></div>
+
+        <div class="result" id="intermediateResult"></div>
+
+        <button
+            class="btn medium"
+            id="intermediateNextBtn"
+            onclick="nextIntermediateQuestion()"
+            style="margin-top:20px; display:none;">
+
+            Next Question
+
+        </button>
+
+        <div class="score">
+            Score:
+            <span id="intermediateScore">0</span>/10
+        </div>
+
+    `;
+
+    document.getElementById("intermediateQuiz")
+        .style.display = "block";
+
+    loadIntermediateQuestion();
+}
+function unlockHard(){
+
+    const hardBtn =
+        document.getElementById("hardBtn");
+
+    hardBtn.innerText = "Start Hard";
+
+    hardBtn.disabled = false;
+
+    hardBtn.style.opacity = "1";
+
+    hardBtn.style.cursor = "pointer";
+
+    hardBtn.style.background =
+        "linear-gradient(135deg,#ef4444,#dc2626)";
+
+    alert("🔥 Hard Level Unlocked!");
+}
+/* =========================
+   HARD VARIABLES
+========================= */
+
+let hardIndex = 0;
+let hardScore = 0;
+
+/* =========================
+   START HARD QUIZ
+========================= */
+
+function startHard(){
+
+    // HIDE OTHER QUIZZES
+    document.getElementById("quizBox")
+        .style.display = "none";
+
+    document.getElementById("intermediateQuiz")
+        .style.display = "none";
+
+    // SHOW HARD QUIZ
+    document.getElementById("hardQuiz")
+        .style.display = "block";
+
+    // RESET
+    hardIndex = 0;
+    hardScore = 0;
+
+    loadHardQuestion();
+}
+
+/* =========================
+   LOAD HARD QUESTION
+========================= */
+
+function loadHardQuestion(){
+
+    // FINISH
+    if(hardIndex >= hardData.length){
+
+        document.getElementById("hardQuiz")
+        .innerHTML = `
+
+            <h1>🎉 Hard Level Completed</h1>
+
+            <h2 style="margin-top:20px;">
+                Score: ${hardScore}/${hardData.length}
+            </h2>
+
+            <h2 style="color:#10b981; margin-top:20px;">
+                You are now a SignBridge Master 🚀
+            </h2>
+
+            <button class="btn hard"
+            onclick="retryHard()"
+            style="margin-top:30px;">
+
+                Retry Hard
+
+            </button>
+
+        `;
+
+        return;
+    }
+
+    // SHOW CURRENT WORD
+    document.getElementById("hardQuestion")
+    .innerHTML = `
+        Question ${hardIndex + 1}/${hardData.length}
+        <br><br>
+        Show Sign:
+        <span style="color:#ef4444;">
+            ${hardData[hardIndex]}
+        </span>
+    `;
+
+    // CLEAR RESULT
+    document.getElementById("hardResult")
+        .innerHTML = "";
+}
+
+/* =========================
+   CHECK HARD ANSWER
+========================= */
+
+function checkHardAnswer(){
+
+    fetch('/get_prediction')
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        let prediction =
+            data.text.toUpperCase().trim();
+
+        let answer =
+            hardData[hardIndex].toUpperCase().trim();
+
+        // CORRECT
+        if(prediction === answer){
+
+            hardScore++;
+
+            document.getElementById(
+                "hardResult"
+            ).innerHTML = `
+
+                ✅ Correct!
+                <br>
+                AI Predicted:
+                ${prediction}
+
+            `;
+
+            document.getElementById(
+                "hardResult"
+            ).className = "result correct";
+
+            hardIndex++;
+
+            // NEXT QUESTION
+            setTimeout(() => {
+
+                loadHardQuestion();
+
+            }, 1500);
+        }
+
+        // WRONG
+        else{
+
+            document.getElementById(
+                "hardResult"
+            ).innerHTML = `
+
+                ❌ Wrong
+                <br><br>
+
+                AI Predicted:
+                <b>${prediction}</b>
+
+                <br><br>
+
+                Correct Answer:
+                <b>${answer}</b>
+
+            `;
+
+            document.getElementById(
+                "hardResult"
+            ).className = "result wrong";
+        }
+
+    })
+
+    .catch(error => {
+
+        document.getElementById(
+            "hardResult"
+        ).innerHTML = `
+            ❌ Camera Prediction Error
+        `;
+
+        console.log(error);
+    });
+}
+
+/* =========================
+   RETRY HARD QUIZ
+========================= */
+
+function retryHard(){
+
+    document.getElementById("hardQuiz")
+    .innerHTML = `
+
+        <h1>Hard Quiz</h1>
+
+        <h2 id="hardQuestion">
+            Show This Sign
+        </h2>
+
+        <div class="video-box"
+        style="margin-top:20px;">
+
+            <img
+            id="feed"
+            src="/video_feed"
+            width="400">
+
+        </div>
+
+        <div class="result"
+        id="hardResult"></div>
+
+        <button
+        class="btn hard"
+        onclick="checkHardAnswer()"
+        style="margin-top:20px;">
+
+            Check Answer
+
+        </button>
+
+    `;
+
+    startHard();
+}
+
+</script>
+
+</body>
+</html>

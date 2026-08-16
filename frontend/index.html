@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SignBridge - Home</title>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    -->
+    <link rel="stylesheet" href="static/css/style.css">
+    <style> 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    color: #1e293b;
+}
+
+/* NAVBAR */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 8%;
+    
+    background: #ffffff;   /* FORCE WHITE */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* LOGO */
+.logo {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #0f172a;   /* DARK TEXT */
+}
+
+/* LINKS */
+.nav-links a {
+    text-decoration: none;
+    color: #475569;   /* visible gray */
+    font-weight: 500;
+    margin-left: 25px;
+    transition: 0.3s;
+}
+
+/* HOVER */
+.nav-links a:hover {
+    color: #4f46e5;
+}
+
+/* ACTIVE */
+.nav-links a.active {
+    color: #4f46e5;
+}
+
+/* HERO */
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background: #e0e7ff;
+    color: #4f46e5;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, #4f46e5, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    margin-top: 20px;
+    color: #64748b;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* BUTTONS */
+.btn-group {
+    margin-top: 30px;
+}
+.btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+/* OPEN TRANSLATOR */
+.btn-main {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    transition: 0.3s;
+}
+
+.btn-main:hover {
+    background: linear-gradient(135deg, #4f46e5, #3730a3);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+}
+
+/* START LEARNING */
+.btn-outline {
+    border: 2px solid #4f46e5;
+    color: #4f46e5;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+/* ONLY ON HOVER */
+.btn-outline:hover {
+    background: #4f46e5;
+    color: white;
+    transform: translateY(-2px);
+}
+/* CARDS */
+.card-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 40px 8%;
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+}
+.card a {
+    text-decoration: none;   /* REMOVE underline */
+    color: #4f46e5;
+    font-weight: 500;
+}
+
+.card a:hover {
+    text-decoration: none;   /* prevent re-appearing */
+    opacity: 0.8;
+}
+
+/* MODULES */
+.modules {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.module-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 30px;
+}
+
+.module {
+    padding: 20px 30px;
+    border-radius: 15px;
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">SignBridge</div>
+    <div class="nav-links">
+        <a href="/" class="active">Home</a>
+        <a href="/learn">Learn</a>
+        <a href="/translator">Translator</a>
+        <a href="/practice">Practice</a>
+    </div>
+</nav>
+
+<div class="hero">
+    <div class="badge">✨ Indian Sign Language • ISL</div>
+
+    <h1>
+        A bridge between <br>
+        <span class="gradient-text">silence and sound.</span>
+    </h1>
+
+    <p>
+        Learn Indian Sign Language and translate seamlessly between speech,
+        text and hand gestures.
+    </p>
+
+    <div class="btn-group">
+        <a href="/translator"><button class="btn btn-main">Open Translator</button></a>
+        <a href="/learn"><button class="btn btn-outline">Start Learning</button></a>
+    </div>
+</div>
+
+<div class="card-container">
+    <div class="card">
+        <h2>📘 Learn</h2>
+        <p>Alphabets, numbers and everyday words with visual signs.</p>
+        <br>
+        <a href="/learn">Open →</a>
+    </div>
+
+    <div class="card">
+        <h2>🔄 Translator</h2>
+        <p>Speech ↔ Text ↔ Sign ↔ Gesture, all in one place.</p>
+        <br>
+        <a href="/translator">Open →</a>
+    </div>
+</div>
+
+<div class="modules">
+    <h3>BUILT-IN MODULES</h3>
+
+    <div class="module-grid">
+        <div class="module">🎤 Speech-to-Text</div>
+        <div class="module">🔤 Text-to-Sign</div>
+        <div class="module">📷 Camera Input</div>
+        <div class="module">✨ AI Gesture Recognition</div>
+        <div class="module">🔊 Text-to-Speech</div>
+    </div>
+</div>
+
+</body>
+</html>
