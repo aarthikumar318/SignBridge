@@ -168,7 +168,7 @@ function showCategory(cat) {
 
     data[cat].forEach(item => {
 
-        const imagePath = `/static/signs/${cat}/${item.toLowerCase().replace(' ', '_')}.jpeg`;
+        const imagePath = `static/signs/${cat}/${item.toLowerCase().replace(' ', '_')}.jpeg`;
 
         container.innerHTML += `
         <div class="sign-card">
