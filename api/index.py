@@ -2,16 +2,14 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-
-@app.route("/")
+@app.get("/")
 def home():
     return jsonify({
         "status": "success",
         "message": "SignBridge backend is running!"
     })
 
-
-@app.route("/api/health")
+@app.get("/api/health")
 def health():
     return jsonify({
         "status": "ok"
